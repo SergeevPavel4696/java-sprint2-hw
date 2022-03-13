@@ -15,7 +15,12 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, SubTask> subTaskMap = new HashMap<>();
     private Integer id = 0;
 
-    public InMemoryHistoryManager historyManager = (InMemoryHistoryManager) Managers.getDefaultHistory();
+    private HistoryManager historyManager = Managers.getDefaultHistory();
+
+    //ПОлучить историю запросов
+    public HistoryManager getHistoryManager() {
+        return historyManager;
+    }
 
     //Получить следующий id
     @Override
