@@ -1,8 +1,8 @@
 import manager.InMemoryTaskManager;
-import util.Managers;
 import tasks.Epic;
 import tasks.SubTask;
 import tasks.Task;
+import util.Managers;
 
 import java.util.ArrayList;
 
@@ -30,31 +30,31 @@ public class Main {
         SubTask subTask3 = new SubTask(taskManager.getId(), "Подзадача 3", "Описание подзадачи 3", NEW, 4);
         taskManager.createSubTask(subTask3);
 
-        System.out.println(taskManager.historyManager.getHistory());
+        System.out.println(taskManager.getHistoryManager().getHistory());
         System.out.println(taskManager.getTask(1));
-        System.out.println(taskManager.historyManager.getHistory());
+        System.out.println(taskManager.getHistoryManager().getHistory());
         System.out.println(taskManager.getTask(2));
-        System.out.println(taskManager.historyManager.getHistory());
+        System.out.println(taskManager.getHistoryManager().getHistory());
         System.out.println(taskManager.getTask(1));
-        System.out.println(taskManager.historyManager.getHistory());
+        System.out.println(taskManager.getHistoryManager().getHistory());
         System.out.println(taskManager.getEpic(3));
-        System.out.println(taskManager.historyManager.getHistory());
+        System.out.println(taskManager.getHistoryManager().getHistory());
         System.out.println(taskManager.getEpic(3));
-        System.out.println(taskManager.historyManager.getHistory());
+        System.out.println(taskManager.getHistoryManager().getHistory());
         System.out.println(taskManager.getEpic(4));
-        System.out.println(taskManager.historyManager.getHistory());
+        System.out.println(taskManager.getHistoryManager().getHistory());
         System.out.println(taskManager.getSubTask(5));
-        System.out.println(taskManager.historyManager.getHistory());
+        System.out.println(taskManager.getHistoryManager().getHistory());
         System.out.println(taskManager.getSubTask(6));
-        System.out.println(taskManager.historyManager.getHistory());
+        System.out.println(taskManager.getHistoryManager().getHistory());
         System.out.println(taskManager.getSubTask(5));
-        System.out.println(taskManager.historyManager.getHistory());
+        System.out.println(taskManager.getHistoryManager().getHistory());
         System.out.println(taskManager.getSubTask(6));
-        System.out.println(taskManager.historyManager.getHistory());
+        System.out.println(taskManager.getHistoryManager().getHistory());
         System.out.println(taskManager.getSubTask(7));
-        System.out.println(taskManager.historyManager.getHistory());
+        System.out.println(taskManager.getHistoryManager().getHistory());
         System.out.println(taskManager.getTask(1));
-        System.out.println(taskManager.historyManager.getHistory());
+        System.out.println(taskManager.getHistoryManager().getHistory());
 
 
         taskManager.updateTask(new Task(task1.getId(), "Задача 1", "Описание задачи 1", IN_PROGRESS));
