@@ -7,7 +7,10 @@ import java.util.List;
 public interface HistoryManager {
 
     //Добавление задачи в список истории
-    void add(Task task);
+    void linkLast(Task task);
+
+    //Удаление задачи из списка истории
+    void remove(int id);
 
     //Получение списка истории задач
     List<Task> getHistory();
