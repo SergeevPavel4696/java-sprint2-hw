@@ -8,6 +8,7 @@ import tasks.SubTask;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Task> taskMap = new HashMap<>();
@@ -267,6 +268,11 @@ public class InMemoryTaskManager implements TaskManager {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public List<Task> history() {
+        return historyManager.getHistory();
     }
 
     @Override
