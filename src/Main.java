@@ -27,7 +27,7 @@ public class Main {
         taskManager.createSubTask(subTask1);
         SubTask subTask2 = new SubTask(taskManager.getId(), "Подзадача 2", "Описание подзадачи 2", NEW, 3);
         taskManager.createSubTask(subTask2);
-        SubTask subTask3 = new SubTask(taskManager.getId(), "Подзадача 3", "Описание подзадачи 3", NEW, 4);
+        SubTask subTask3 = new SubTask(taskManager.getId(), "Подзадача 3", "Описание подзадачи 3", NEW, 3);
         taskManager.createSubTask(subTask3);
 
         System.out.println(taskManager.getHistoryManager().getHistory());
@@ -62,8 +62,12 @@ public class Main {
         taskManager.updateSubTask(new SubTask(subTask1.getId(), "Подзадача 1", "Описание подзадачи 1", DONE, 3));
         taskManager.updateSubTask(new SubTask(subTask3.getId(), "Подзадача 3", "Описание подзадачи 3", IN_PROGRESS, 4));
 
+        System.out.println("\n" + taskManager.getHistoryManager().getHistory() + "\n");
+
         taskManager.deleteTask(1);
         taskManager.deleteEpic(3);
+
+        System.out.println(taskManager.getHistoryManager().getHistory() + "\n");
 
         taskManager.deleteAllTask();
         Task task = taskManager.getTask(10);
