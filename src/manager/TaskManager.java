@@ -6,6 +6,7 @@ import tasks.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public interface TaskManager {
     //Получить следующий id
@@ -70,6 +71,9 @@ public interface TaskManager {
 
     //Получить список подзадач эпика
     ArrayList<SubTask> getSubTaskListOfEpic(Integer idEpic);
+
+    //Получить историю просмотров
+    List<Task> history();
 
     //Получить карту задач
     HashMap<Integer, Task> getTaskMap();
