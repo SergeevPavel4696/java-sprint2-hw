@@ -55,6 +55,7 @@ public class InMemoryTaskManager implements TaskManager {
             if (taskMap.containsKey(id)) {
                 if (taskMap.get(id) != null) {
                     taskMap.remove(id);
+                    historyManager.remove(id);
                 }
             }
         }
@@ -71,7 +72,7 @@ public class InMemoryTaskManager implements TaskManager {
     public Task getTask(Integer id) {
         if (id != null) {
             if (taskMap.containsKey(id)) {
-                historyManager.add(taskMap.get(id));
+                historyManager.linkLast(taskMap.get(id));
                 return taskMap.get(id);
             } else {
                 return null;
@@ -117,8 +118,10 @@ public class InMemoryTaskManager implements TaskManager {
         if (idEpic != null) {
             for (Integer id : epicMap.get(idEpic).getSubTaskIdMap().keySet()) {
                 subTaskMap.remove(id);
+                historyManager.remove(id);
             }
             epicMap.remove(idEpic);
+            historyManager.remove(idEpic);
         }
     }
 
@@ -133,7 +136,7 @@ public class InMemoryTaskManager implements TaskManager {
     public Epic getEpic(Integer id) {
         if (id != null) {
             if (epicMap.containsKey(id)) {
-                historyManager.add(epicMap.get(id));
+                historyManager.linkLast(epicMap.get(id));
                 return epicMap.get(id);
             } else {
                 return null;
@@ -199,11 +202,11 @@ public class InMemoryTaskManager implements TaskManager {
     //Удалить подзадачу
     @Override
     public void deleteSubTask(Integer id) {
-
         if (id != null) {
             if (subTaskMap.containsKey(id)) {
                 if (subTaskMap.get(id) != null) {
                     subTaskMap.remove(id);
+                    historyManager.remove(id);
                     epicMap.get(subTaskMap.get(id).getIdEpic()).removeSubTaskId(subTaskMap.get(id));
                 }
             }
@@ -224,7 +227,7 @@ public class InMemoryTaskManager implements TaskManager {
     public SubTask getSubTask(Integer id) {
         if (id != null) {
             if (subTaskMap.containsKey(id)) {
-                historyManager.add(subTaskMap.get(id));
+                historyManager.linkLast(subTaskMap.get(id));
                 return subTaskMap.get(id);
             } else {
                 return null;
