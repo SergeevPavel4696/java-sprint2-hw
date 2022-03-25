@@ -17,7 +17,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     private HistoryManager historyManager = Managers.getDefaultHistory();
 
-    //ПОлучить историю запросов
+    //Получить историю запросов
     public HistoryManager getHistoryManager() {
         return historyManager;
     }
