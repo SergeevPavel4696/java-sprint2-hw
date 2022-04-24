@@ -67,7 +67,7 @@ public class Main {
 
         System.out.println("\n" + taskManager.getHistoryManager().getHistory() + "\n");
 
-        /*taskManager.deleteTask(1);
+        taskManager.deleteTask(1);
         taskManager.deleteEpic(3);
 
         System.out.println(taskManager.getHistoryManager().getHistory() + "\n");
@@ -93,6 +93,6 @@ public class Main {
 
         System.out.println(taskManager.getTaskMap());
         System.out.println(taskManager.getEpicMap());
-        System.out.println(taskManager.getSubTaskMap());*/
+        System.out.println(taskManager.getSubTaskMap());
     }
 }
