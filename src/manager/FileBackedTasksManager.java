@@ -1,25 +1,15 @@
 package manager;
 
 import exceptions.ManagerSaveException;
-import tasks.Epic;
-import tasks.Status;
-import tasks.Task;
-import tasks.Type;
-import tasks.SubTask;
+import tasks.*;
 
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.TreeMap;
+import java.util.*;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
 
@@ -58,10 +48,12 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         this.file = file;
     }
 
+    String line = "id,type,name,status,description,epic";
+
     //Сохранение менеджера задач в файл
     private void save() {
         //Общая карта задач по id
-        TreeMap<Integer, String> tasks = new TreeMap<>(Comparator.comparingInt(o -> o));
+        TreeMap<Integer, String> tasks = new TreeMap<>(Comparator.naturalOrder());
         for (Task task : taskMap.values()) {
             tasks.put(task.getId(), toString(task));
         }
@@ -71,25 +63,28 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         for (SubTask subTask : subTaskMap.values()) {
             tasks.put(subTask.getId(), toString(subTask));
         }
-        try (OutputStream os = new FileOutputStream(file)) {
-            PrintWriter pw = new PrintWriter(new OutputStreamWriter(os, "windows-1251"), true);
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, StandardCharsets.UTF_8))) {
             //Запись в файл информации менеджера задач
-            pw.println("id,type,name,status,description,epic");
+            bw.write(line);
+            bw.newLine();
             for (String task : tasks.values()) {
-                pw.println(task);
+                bw.write(task);
+                bw.newLine();
             }
-            pw.println("\n" + toString(historyManager));
-        } catch (IOException e) {
-            throw new ManagerSaveException("Не удаётся сохранить в файл: " + file.getName(), e);
+            bw.newLine();
+            bw.write(toString(historyManager));
+            bw.flush();
+        } catch (IOException exp) {
+            throw new ManagerSaveException("Не удаётся сохранить в файл: " + file.getName(), exp);
         }
     }
 
     //Восстановление менеджера задач из файла
-    public static FileBackedTasksManager loadFromFile(File file) {
-        FileBackedTasksManager fbtm = new FileBackedTasksManager(file);
+    private static FileBackedTasksManager loadFromFile(File file) {
+        FileBackedTasksManager manager = new FileBackedTasksManager(file);
         try {
             //Список задач в виде строк
-            List<String> tasks = Files.readAllLines(file.toPath(), Charset.forName("windows-1251"));
+            List<String> tasks = Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);
             //Заполнение карт задач возвращаемого менеджера
             for (int i = 1; i < tasks.size() - 1; i++) {
                 String str = tasks.get(i);
@@ -97,36 +92,43 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                     tasks.remove(str);
                     break;
                 }
-                String type = taskFromString(str).getClass().getSimpleName();
-                if ("Task".equals(type)) {
-                    fbtm.taskMap.put(Integer.parseInt(str.split(",")[0]), taskFromString(str));
-                }
-                if ("Epic".equals(type)) {
-                    fbtm.epicMap.put(Integer.parseInt(str.split(",")[0]), (Epic) taskFromString(str));
-                }
-                if ("SubTask".equals(type)) {
-                    fbtm.subTaskMap.put(Integer.parseInt(str.split(",")[0]), (SubTask) taskFromString(str));
+                Type type = Objects.requireNonNull(taskFromString(str)).getType();
+
+                switch (type) {
+                    case TASK: {
+                        manager.taskMap.put(Integer.parseInt(str.split(",")[0]), taskFromString(str));
+                        break;
+                    }
+                    case EPIC: {
+                        manager.epicMap.put(Integer.parseInt(str.split(",")[0]), (Epic) taskFromString(str));
+                        break;
+                    }
+                    case SUBTASK: {
+                        manager.subTaskMap.put(Integer.parseInt(str.split(",")[0]), (SubTask) taskFromString(str));
+                        break;
+                    }
                 }
             }
+            String history = tasks.get(tasks.size() - 1);
             //Вызов истории просмотров задач
-            for (Integer id : historyFromString(tasks.get(tasks.size() - 1))) {
-                fbtm.getTask(id);
-                fbtm.getEpic(id);
-                fbtm.getSubTask(id);
+            for (Integer id : historyFromString(history)) {
+                manager.getTask(id);
+                manager.getEpic(id);
+                manager.getSubTask(id);
             }
             //Восстановление последнего id менеджера
-            fbtm.id = tasks.size() - 2;
+            manager.id = Integer.parseInt(tasks.get(tasks.size() - 2).split(",")[0]);
         } catch (IOException e) {
             throw new ManagerSaveException("Не удаётся прочитать файл: " + file.getName(), e);
         }
-        return fbtm;
+        return manager;
     }
 
     //Превращение задачи в строку
     private <T extends Task> String toString(T task) {
         String taskLine = String.join(",",
                 task.getId().toString(),
-                task.getClass().getSimpleName(),
+                task.getType().toString(),
                 task.getTitle(),
                 task.getStatus().toString(),
                 task.getDescription());
@@ -156,13 +158,15 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                         tasks[2],
                         tasks[4],
                         Status.valueOf(tasks[3]));
-            default:
+            case SUBTASK:
                 return new SubTask(
                         Integer.parseInt(tasks[0]),
                         tasks[2],
                         tasks[4],
                         Status.valueOf(tasks[3]),
                         Integer.parseInt(tasks[5]));
+            default:
+                return null;
         }
     }
 
