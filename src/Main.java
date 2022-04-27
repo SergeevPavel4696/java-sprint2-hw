@@ -1,20 +1,17 @@
-import manager.FileBackedTasksManager;
+import manager.InMemoryTaskManager;
 import tasks.Epic;
 import tasks.SubTask;
 import tasks.Task;
+import util.Managers;
 
-import java.io.File;
 import java.util.ArrayList;
 
-import static tasks.Status.NEW;
-import static tasks.Status.IN_PROGRESS;
-import static tasks.Status.DONE;
+import static tasks.Status.*;
 
 public class Main {
 
     public static void main(String[] args) {
-        File file = new File("Tasks.csv");
-        FileBackedTasksManager taskManager = new FileBackedTasksManager(file);
+        InMemoryTaskManager taskManager = (InMemoryTaskManager) Managers.getDefault();
 
         Task task1 = new Task(taskManager.getId(), "Задача 1", "Описание задачи 1", NEW);
         taskManager.createTask(task1);
