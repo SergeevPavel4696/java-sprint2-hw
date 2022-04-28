@@ -6,7 +6,9 @@ import util.Managers;
 
 import java.util.ArrayList;
 
-import static tasks.Status.*;
+import static tasks.Status.DONE;
+import static tasks.Status.IN_PROGRESS;
+import static tasks.Status.NEW;
 
 public class Main {
 
