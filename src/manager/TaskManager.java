@@ -7,8 +7,19 @@ import tasks.Task;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeSet;
 
 public interface TaskManager {
+
+    //Получить список задач, ранжированный по времени
+    TreeSet<Task> getPrioritizedTasks();
+
+    //Проверка пересечения времени задач
+    <T extends Task> boolean timeValidation(T task);
+
+    //Получить историю запросов
+    HistoryManager getHistoryManager();
+
     //Получить следующий id
     Integer getId();
 
@@ -50,6 +61,9 @@ public interface TaskManager {
 
     //проверка и обновление статуса
     void determineStatus(SubTask subTask);
+
+    //Рассчитать время эпика
+    Epic setEpicTime(Epic epic);
 
     //Создать подзадачу
     void createSubTask(SubTask subTask);

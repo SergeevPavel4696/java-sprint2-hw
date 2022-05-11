@@ -2,6 +2,7 @@ package manager;
 
 import tasks.Task;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface HistoryManager {
@@ -14,4 +15,6 @@ public interface HistoryManager {
 
     //Получение списка истории задач
     List<Task> getHistory();
+
+    ArrayList<Task> getTasks();
 }

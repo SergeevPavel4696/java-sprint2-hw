@@ -1,0 +1,6 @@
+id,type,name,status,description,epic,start,end,duration,id epic
+1,TASK,Задача 1,NEW,Описание задачи 1
+2,TASK,Задача 2,DONE,Описание задачи 2
+3,TASK,Задача 3,IN_PROGRESS,Описание задачи 3
+4,TASK,Задача 4,NEW,Описание задачи 4
+
